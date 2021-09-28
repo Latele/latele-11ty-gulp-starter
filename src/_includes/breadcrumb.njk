@@ -1,0 +1,25 @@
+{# パンくずリスト #}
+
+<nav aria-label="パンくずリスト" class="breadcrumbWrap" id="breadcrumb">
+  <ol class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+    <li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+      <a href="/" itemprop="item">
+        <span itemprop="name">{%- if site.breadcrumbHomeText %}{{ site.breadcrumbHomeText }}{%- else -%}HOME{%- endif %}</span>
+      </a>
+      <meta itemprop="position" content="1" />
+    </li>
+    {%- for breadcrumb in breadcrumbs %}
+    <li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"{{ ' aria-current="page"' if loop.last }}>
+      {%- if loop.last %}
+      <span itemprop="name">{{ breadcrumb.item }}</span>
+      <meta itemprop="position" content="{{ loop.index + 1 }}" />
+      {%- else %}
+      <a href="{{ breadcrumb.href }}" itemprop="item">
+        <span itemprop="name">{{ breadcrumb.item }}</span>
+      </a>
+      <meta itemprop="position" content="{{ loop.index + 1 }}" />
+      {%- endif %}
+    </li>
+    {%- endfor %}
+  </ol>
+</nav>

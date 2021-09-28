@@ -1,0 +1,26 @@
+@use "../../global" as g;
+// -----------------------------------------
+// margin 関係
+// -----------------------------------------
+$spaceClass: true;
+$spacePadding: false;
+$endValue: 20;
+
+@if $spaceClass {
+    @for $i from 0 through $endValue {
+        .mt#{$i * 5} {
+            margin-top: 5px * $i;
+        }
+        .mb#{$i * 5} {
+            margin-bottom: 5px * $i;
+        }
+        @if $spacePadding {
+            .pt#{$i * 5} {
+                padding-top: 5px * $i;
+            }
+            .pb#{$i * 5} {
+                padding-bottom: 5px * $i;
+            }
+        }
+    }
+}

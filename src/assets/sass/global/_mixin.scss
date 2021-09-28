@@ -1,0 +1,25 @@
+@use "variables" as v;
+// ===================================================================
+// ミックスイン
+// ===================================================================
+
+// clearfix
+@mixin clearfix($display: table) {
+  &::after {
+    content: "";
+    display: $display;
+    clear: both;
+  }
+}
+
+// ブレイクポイント
+@mixin media($breakpoint) {
+  @media #{map-get(v.$breakpoints, $breakpoint)} {
+    @content;
+  }
+}
+
+// z-index 管理
+@mixin z-index($key) {
+  z-index: map-get(v.$layer, $key);
+}

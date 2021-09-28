@@ -1,0 +1,36 @@
+---
+layout: layouts/default.njk
+title: お知らせ
+description:
+bodyClass: page-info
+pagination:
+  data: news.contents
+  size: 1
+  alias: item
+permalink: "/info/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber + 1 }}/{% endif %}index.html"
+renderData:
+  title: "{{ item.date | formatDate('YYYY年MM月DD日') }}"
+---
+
+<section>
+  <h2 class="title -style01">{{ title }}</h2>
+  <p>_data/news.jsonから取得したデータのページ分割テスト</p>
+
+  <h3 class="title -style02">{{ item.date | formatDate('YYYY年MM月DD日') }}</h3>
+  <p>
+    {{ item.paragraph }}
+  </p>
+</section>
+
+<nav aria-labelledby="my-pagination">
+  <h2 class="title -style01" id="my-pagination">ページネーション</h2>
+  <ol>
+    <li>{% if page.url != pagination.href.first %}<a href="{{ pagination.href.first }}">First</a>{% else %}First{% endif %}</li>
+    <li>{% if pagination.href.previous %}<a href="{{ pagination.href.previous }}">Previous</a>{% else %}Previous{% endif %}</li>
+{%- for pageEntry in pagination.pages %}
+    <li><a href="{{ pagination.hrefs[ loop.index0 ] }}"{% if page.url == pagination.hrefs[ loop.index0 ] %} aria-current="page"{% endif %}>{{ loop.index }}</a></li>
+{%- endfor %}
+    <li>{% if pagination.href.next %}<a href="{{ pagination.href.next }}">Next</a>{% else %}Next{% endif %}</li>
+    <li>{% if page.url != pagination.href.last %}<a href="{{ pagination.href.last }}">Last</a>{% else %}Last{% endif %}</li>
+  </ol>
+</nav>

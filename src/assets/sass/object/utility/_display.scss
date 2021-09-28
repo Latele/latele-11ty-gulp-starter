@@ -1,0 +1,13 @@
+@use "../../global" as g;
+// display
+.pc {
+  @include g.media(sp) {
+    display: none;
+  }
+}
+.sp {
+  display: none;
+  @include g.media(sp) {
+    display: block;
+  }
+}

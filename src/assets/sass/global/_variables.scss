@@ -1,0 +1,74 @@
+// ===================================================================
+// 変数色々
+// width, font, z-index, breakpoints, color
+// ===================================================================
+
+// -----------------------------------------
+// 幅関係の設定
+// -----------------------------------------
+// 全体
+$width-base: 950px;
+
+// 最大幅
+$width-max: 1280px;
+
+// 最小幅
+$width-min: 0;
+
+// メインエリアの幅
+$width-main: 950px;
+
+// サイドバーの幅
+$width-side: 240px;
+
+
+
+// -----------------------------------------
+// フォント関係の設定
+// -----------------------------------------
+// ベースフォント
+$font-base: "游ゴシック", "Yu Gothic", "YuGothic", "メイリオ", "Meiryo", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "Verdana", "Arial", sans-serif;
+
+// 明朝
+$font-mincho: "YuMincho", "Yu Mincho", 游明朝体, "ヒラギノ明朝 Pro W6", "Hiragino Mincho Pro", "HGS明朝E", "ＭＳ Ｐ明朝", serif;
+
+
+
+// -----------------------------------------
+// z-index 管理
+// -----------------------------------------
+$layer: (
+  default : 1
+);
+
+
+// -----------------------------------------
+// ブレイクポイントの設定
+// -----------------------------------------
+$breakpoints: (
+  pc:      "screen and (min-width: 769px)",
+  tablet:    "screen and (max-width: 1000px)",
+  sp:      "screen and (max-width: 768px)",
+  w320: "screen and (max-width: 320px)",
+) !default;
+
+
+
+// -----------------------------------------
+// 色関係の設定
+// -----------------------------------------
+// サイトカラー
+$color-base: white;
+$color-main: #0081a3;
+$color-sub: #d62a2a;
+$color-body: #fff;
+
+// フォントカラー
+$color-font: #333;
+
+// リンクカラー
+$color-link: #0083b4;
+$color-link_visited: #4555C7;
+$color-link_hover: #004B7F;
+$color-link_active: #4555C7;
+

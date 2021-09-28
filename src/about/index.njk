@@ -1,0 +1,20 @@
+---
+layout: layouts/default.njk
+title: アバウト
+description: サイトの説明をするアバウトページです。
+bodyClass: page-about
+---
+
+<section>
+
+  <h2 class="title -style01">{{ title }}</h2>
+  <p>ここはアバウトページになります。</p>
+
+  <h3 class="title -style02">パンくずリストのテスト</h3>
+  <p>最後の現在地は front-matter の title が入る</p>
+  {# パンくずリスト START #}
+  {%- set breadcrumbs = [{item: '第2階層', href: '/example.html'}, {item: title}]-%}
+  {%- include 'breadcrumb.njk' -%}
+  {# パンくずリスト END #}
+
+</section>

@@ -1,0 +1,26 @@
+{# meta関係色々。値は_data/site.jsにて設定 #}
+<meta charset="{{ site.charset }}" />
+<title>
+  {%- if page.url !== '/' -%}
+    {{ renderData.title or title }} - {{ site.title }}
+    {%- else -%}
+    {{ site.title }}
+    {%- if site.catch -%}
+      {{ site.catch }}
+    {%- endif -%}
+  {%- endif -%}
+</title>
+<meta name="description" content="{{ renderData.description or description or site.description }}" />
+<meta name="viewport" content="{{ site.viewport }}" />
+<meta name="format-detection" content="telephone=no">
+<meta property="og:title" content="{% if page.url !== '/' %}{{ renderData.title or title }} - {{ site.title }}{%- else -%}{{ site.title }}{%- if site.catch -%}{{ site.catch }}{%- endif -%}{%- endif -%}" />
+<meta property="og:type" content="{% if page.url !== '/' %}{{ site.ogType }}{%- else -%}{{ site.ogType_top }}{%- endif -%}" />
+<meta property="og:url" content="{{ site.url | url }}{{ page.url | url }}" />
+<meta property="og:image" content="{{ site.url | url }}{{ site.ogImage | url }}" />
+<meta property="og:site_name" content="{{ site.title }}" />
+<meta property="og:description" content="{{ renderData.description or description or site.description }}" />
+<meta property="og:locale" content="{{ site.locale }}" />
+<meta name="twitter:card" content="{{ site.twitterCard }}" />
+{% if site.twitterSite %}<meta name="twitter:site" content="{{ site.twitterSite }}" />{% endif %}
+
+<link rel="icon" href="{{ site.faviconPath }}" />

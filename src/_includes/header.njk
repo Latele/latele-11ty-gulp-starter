@@ -1,0 +1,20 @@
+{# ヘッダー部分 #}
+
+<header class="header">
+  <div class="header__inner">
+    <div class="logo">
+      {# トップページはh1で下層ページはpに #}
+      <{% if page.url == '/' %}h1{%- else -%}p{%- endif %} class="logo__item">
+        <a href="/">logo</a>
+      </{% if page.url == '/' %}h1{%- else -%}p{%- endif -%}>
+    </div>
+    <nav class="nav">
+      <ul class="nav__list">
+        <li class="nav__item -top"><a class="nav__link" href="/">トップ</a></li>
+        <li class="nav__item -about"><a class="nav__link" href="/about/">アバウト</a></li>
+        <li class="nav__item -info"><a class="nav__link" href="/info/">お知らせ</a></li>
+        <li class="nav__item -contact"><a class="nav__link" href="/contact/">お問い合わせ</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
