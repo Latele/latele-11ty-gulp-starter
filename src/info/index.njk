@@ -5,8 +5,8 @@ description:
 bodyClass: page-info
 pagination:
   data: news.contents
-  size: 1
-  alias: item
+  size: 2
+  alias: items
 permalink: "/info/{% if pagination.pageNumber > 0 %}page-{{ pagination.pageNumber + 1 }}/{% endif %}index.html"
 renderData:
   title: "{{ item.date | formatDate('YYYY年MM月DD日') }}"
@@ -15,11 +15,12 @@ renderData:
 <section>
   <h2 class="title -style01">{{ title }}</h2>
   <p>_data/news.jsonから取得したデータのページ分割テスト</p>
-
-  <h3 class="title -style02">{{ item.date | formatDate('YYYY年MM月DD日') }}</h3>
-  <p>
-    {{ item.paragraph }}
-  </p>
+  {%- for item in items %}
+    <h3 class="title -style02">{{ item.date | formatDate('YYYY年MM月DD日') }}</h3>
+    <p>
+      {{ item.paragraph }}
+    </p>
+  {%- endfor %}
 </section>
 
 <nav aria-labelledby="my-pagination">
