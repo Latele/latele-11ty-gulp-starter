@@ -22,8 +22,9 @@ bodyClass: page-top
 </ol>
 
 <h2 class="title -style01">日付テスト</h2>
-<p>{{ page.date | formatDate('YYYY年') }}</p>
-<p>{{ page.date | formatDate('YYYY/MM/DD') }}</p>
+<p>何も指定なし：{{ page.date }}</p>
+<p>年だけ表示：{{ page.date | formatDate('YYYY年') }}</p>
+<p>年月日を/で：{{ page.date | formatDate('YYYY/MM/DD') }}</p>
 
 <h2 class="title -style01">_data/news.jsonのお知らせ 3件</h2>
 <ul>
