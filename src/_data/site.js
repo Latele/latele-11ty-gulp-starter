@@ -17,7 +17,7 @@ module.exports = {
   // パンくずリストのトップページの文言
   breadcrumbHomeText: "トップページ",
   // faviconのパス
-  faviconPath: "/assets/img/favicon.ico",
+  faviconPath: "/assets/img/share/favicon.ico",
   // Google AnalyticsのUA設定（gtag.jsは _includes/footer_script.njk）
   gtagUA: "UA-xxxxxxxx-x",
   // トップページ用 og:type
@@ -25,7 +25,7 @@ module.exports = {
   // トップページ以外の og:type
   ogType: "article",
   // og:image
-  ogImage: "/assets/img/blog/share/ogp.jpg",
+  ogImage: "/assets/img/share/ogp.jpg",
   // Twitter Card
   twitterCard: "summary",
   // Twitter Site（空の場合出力しない） 例：@ユーザー名

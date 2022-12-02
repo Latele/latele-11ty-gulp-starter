@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html class="no-js" lang="{{ site.lang }}">
   <head>
-    {% include "meta.njk" ignore missing %}
-    {# CSSのパスを変えるとgulpfile.js、.eleventy.jsも変更が必要 #}
-    <link rel="stylesheet" href="/assets/css/s.css" />
+    {% include "head.njk" ignore missing %}
   </head>
   <body{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
     <div id="skipLink" class="skipLink"><a href="#contents">ページの本文へ</a></div>
