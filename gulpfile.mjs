@@ -1,17 +1,23 @@
 // ---------------------------------------------------------------
 // パッケージ読み込み
 // ---------------------------------------------------------------
-const { src, dest, watch, series, parallel } = require('gulp') // gulp 本体
-const sass = require('gulp-sass')(require('sass')) // さすさす
-const sassGlob = require('gulp-sass-glob-use-forward') // Sassのimportを一括で
-const postcss = require('gulp-postcss') // PostCSS使うためのやつ
-const autoprefixer = require('autoprefixer')  // プレフィックスを自動でやってくれるやつ
-const cssnano = require('cssnano') // CSS圧縮
-const mqpacker = require('mqpacker') // メディアクエリをキレイに
-const plumber = require('gulp-plumber') // エラーで止めない
-const notify = require('gulp-notify') // エラー通知
-const del = require('del') // 不要ファイル削除
-
+import gulp from 'gulp'
+const { src, dest, watch, series, parallel, lastRun } = gulp // gulp 本体
+import dartSass from 'sass'
+import gulpSass from 'gulp-sass'
+const sass = gulpSass(dartSass) // さすさす
+import sassGlob from 'gulp-sass-glob-use-forward' // Sassのimportを一括で
+import postcss from 'gulp-postcss' // PostCSS使うためのやつ
+import autoprefixer from 'autoprefixer'  // プレフィックスを自動でやってくれるやつ
+import cssnano from 'cssnano' // CSS圧縮
+import mqpacker from 'mqpacker' // メディアクエリをキレイに
+import plumber from 'gulp-plumber' // エラーで止めない
+import notify from 'gulp-notify' // エラー通知
+import { deleteAsync } from 'del' // 不要ファイル削除
+import browserSync from 'browser-sync' // ブラウザシンク
+import prettier from 'gulp-prettier' // 整形
+import terser from 'gulp-terser' // JS圧縮
+import fs from 'fs'
 
 
 // ---------------------------------------------------------------
@@ -23,9 +29,17 @@ const paths = {
   dist: '_site', // 書き出し用
   style: {
     src: 'src/assets/sass', // 開発用のSass
-    dist: '_site/assets/css' // 書き出し用のCSS
+    dist: '_site/assets/css', // 書き出し用のCSS
+  },
+  js: {
+    src: 'src/assets/js', // 開発用のJS
+    dist: '_site/assets/js', // 書き出し用のJS
+  },
+  img: {
+    src: 'src/assets/img',
+    dist: '_site/assets/img'
   }
-}
+};
 
 
 
@@ -33,20 +47,21 @@ const paths = {
 // Sass
 // ---------------------------------------------------------------
 
-const css = () => {
+const sass2css = () => {
   return src(paths.style.src + '/**/*.scss', { sourcemaps: true })
-    .pipe(
-      plumber({ errorHandler: notify.onError('Error: <%= error.message %>') })
-    )
-    .pipe(sassGlob())
-    .pipe(sass({
-      outputStyle: 'expanded'
-    }))
-    .pipe(postcss([
-      autoprefixer(),
-      mqpacker()
-    ]))
-    .pipe(dest(paths.style.dist, { sourcemaps: true }))
+  .pipe(
+    plumber({ errorHandler: notify.onError('Error: <%= error.message %>') })
+  )
+  .pipe(sassGlob())
+  .pipe(sass({
+    outputStyle: 'expanded'
+  }))
+  .pipe(postcss([
+    autoprefixer(),
+    mqpacker()
+  ]))
+  .pipe(dest(paths.style.dist, { sourcemaps: true }))
+  .pipe(browserSync.stream())
 }
 
 
@@ -57,10 +72,94 @@ const css = () => {
 
 const minify = () => {
   return src(paths.style.dist + '/*.css')
-    .pipe(postcss([
-      cssnano()
-    ]))
-    .pipe(dest(paths.style.dist))
+  .pipe(postcss([
+    cssnano()
+  ]))
+  .pipe(dest(paths.style.dist))
+}
+
+
+// ---------------------------------------------------------------
+// JS minify
+// ---------------------------------------------------------------
+
+const minifyJS = () => {
+  return src(paths.js.dist + '/*.js')
+  .pipe(terser())
+  .pipe(dest(paths.js.dist))
+}
+
+
+// ---------------------------------------------------------------
+// HTML 整形
+// ---------------------------------------------------------------
+
+const htmlprettier = () => {
+  return src(paths.dist + '/**/*.html')
+  .pipe(
+    prettier({
+      printWidth: 300,
+      tabWidth: 2,
+      parser: 'html'
+    })
+  )
+  .pipe(dest(paths.dist))
+}
+
+
+// ---------------------------------------------------------------
+// ブラウザシンク
+// ---------------------------------------------------------------
+const localserver = done => {
+  browserSync.init({
+    callbacks: {
+      ready: function(err, bs) {
+        bs.addMiddleware("*", (req, res) => {
+          const content_404 = fs.readFileSync('_site/404.html');
+          // Add 404 http status code in request header.
+          res.writeHead(404, { "Content-Type": "text/html; charset=UTF-8" });
+          // Provides the 404 content without redirect.
+          res.write(content_404);
+          res.end();
+        });
+      }
+    },
+    server: {
+      baseDir: paths.dist
+    },
+    // startPath: 'index.html',
+    port: 8080,
+    open: 'external',
+    notify: false,
+    https: true,
+  });
+  done();
+}
+
+
+// ---------------------------------------------------------------
+// オートリロード
+// ---------------------------------------------------------------
+
+const liveReload = done => {
+  browserSync.reload()
+  done()
+}
+
+
+// ---------------------------------------------------------------
+// Copy
+// ---------------------------------------------------------------
+
+const copyJS = () => {
+  return src([paths.js.src + '/**/*'])
+  .pipe(dest(paths.js.dist))
+  .pipe(browserSync.stream())
+}
+const copyImage = () => {
+  return src([paths.img.src + '/**/*'])
+  .pipe(dest(paths.img.dist))
+  .pipe(browserSync.stream())
 }
 
 
@@ -69,27 +168,35 @@ const minify = () => {
 // ---------------------------------------------------------------
 
 // dist（_site）のファイル全部削除
-const cleanAll = () => {
-  return del(paths.dist + "/**/*")
+const clean_all = () => {
+  return deleteAsync(paths.dist + "/**/*");
 }
 
-// 自動リロード用のSassファイルを削除
-const cleanCss = () => {
-  return del(paths.style.dist + "/_reload")
-}
 
+// ---------------------------------------------------------------
+// ファイル監視
+// ---------------------------------------------------------------
+
+const watchFiles = () => {
+  watch([paths.style.src + "/**/*.{css,scss}"], sass2css)
+  watch([paths.js.src + '/**/*.js'], copyJS)
+  watch([paths.img.src + '/**/*'], copyImage)
+  watch([paths.dist + '/**/*.{html,htm,shtml,xml,php,inc}'], liveReload)
+}
 
 
 // ---------------------------------------------------------------
 // 実行
 // ---------------------------------------------------------------
 
-exports.css = css
-exports.minify = minify
-exports.cleanAll = cleanAll
-exports.cleanCss = cleanCss
+export const cleanAll = clean_all
 
-exports.default = series(css)
-exports.build = series(css, minify)
+export default series(copyJS, copyImage, localserver, watchFiles)
 
-exports.watch = () => watch(paths.style.src + "/**/*.scss", css)
+export const build = series(
+  sass2css,
+  copyJS,
+  parallel(copyImage, minify, minifyJS),
+  htmlprettier
+)
+
