@@ -15,7 +15,7 @@ import plumber from 'gulp-plumber' // エラーで止めない
 import notify from 'gulp-notify' // エラー通知
 import { deleteAsync } from 'del' // 不要ファイル削除
 import browserSync from 'browser-sync' // ブラウザシンク
-import prettier from 'gulp-prettier' // 整形
+import htmlbeautify from 'gulp-html-beautify' // HTML整形
 import terser from 'gulp-terser' // JS圧縮
 import fs from 'fs'
 
@@ -97,10 +97,12 @@ const minifyJS = () => {
 const htmlprettier = () => {
   return src(paths.dist + '/**/*.html')
   .pipe(
-    prettier({
-      printWidth: 300,
-      tabWidth: 2,
-      parser: 'html'
+    htmlbeautify({
+      "indent_size": 2,
+      "indent_char": " ",
+      "max_preserve_newlines": 0,
+      "preserve_newlines": false,
+      "extra_liners": [],
     })
   )
   .pipe(dest(paths.dist))
