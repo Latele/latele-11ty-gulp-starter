@@ -17,7 +17,7 @@ module.exports = {
   // パンくずリストのトップページの文言
   breadcrumbHomeText: "トップページ",
   // faviconのパス
-  faviconPath: "/assets/img/share/favicon.ico",
+  faviconPath: "/favicon.png",
   // Google AnalyticsのUA設定（gtag.jsは _includes/footer_script.njk）
   gtagUA: "UA-xxxxxxxx-x",
   // トップページ用 og:type
