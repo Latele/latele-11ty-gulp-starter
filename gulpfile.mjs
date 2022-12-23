@@ -163,6 +163,11 @@ const copyImage = () => {
   .pipe(dest(paths.img.dist))
   .pipe(browserSync.stream())
 }
+const copyPublic = () => {
+  return src(['public/**/*'])
+  .pipe(dest(paths.dist))
+  .pipe(browserSync.stream())
+}
 
 
 // ---------------------------------------------------------------
@@ -183,6 +188,7 @@ const watchFiles = () => {
   watch([paths.style.src + "/**/*.{css,scss}"], sass2css)
   watch([paths.js.src + '/**/*.js'], copyJS)
   watch([paths.img.src + '/**/*'], copyImage)
+  watch(['public/**/*'], copyPublic)
   watch([paths.dist + '/**/*.{html,htm,shtml,xml,php,inc}'], liveReload)
 }
 
@@ -193,12 +199,12 @@ const watchFiles = () => {
 
 export const cleanAll = clean_all
 
-export default series(copyJS, copyImage, localserver, watchFiles)
+export default series(localserver, watchFiles)
 
 export const build = series(
   sass2css,
   copyJS,
-  parallel(copyImage, minify, minifyJS),
+  parallel(copyImage, copyPublic, minify, minifyJS),
   htmlprettier
 )
 
